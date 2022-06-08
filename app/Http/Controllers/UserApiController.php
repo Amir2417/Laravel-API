@@ -18,6 +18,7 @@ class UserApiController extends Controller
             return response()->json(['users'=>$users],200);
         }
     }
+
     public function AddUser(Request $request){
         if($request->ismethod('post')){
             $data = $request ->all();
@@ -156,5 +157,17 @@ class UserApiController extends Controller
         User::whereIn('id',$id)->delete();
         $message ='User Succesfully Deleted';
         return response()->json(['message'=>$message],200);
+    }
+    //DeleteMultipleUserWithJson
+    public function DeleteMultipleUserWithJson(Request $request){
+
+        if($request->isMethod('delete')){
+            $data = $request->all();
+            User::whereIn('id',$data['ids'])->delete();
+            $message ='User Succesfully Deleted';
+            return response()->json(['message'=>$message],200);
+
+
+        }
     }
 }
