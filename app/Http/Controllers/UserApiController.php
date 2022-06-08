@@ -136,4 +136,9 @@ class UserApiController extends Controller
             
         }
     }
+    public function DeleteSingleUser($id=null){
+        User::findOrFail($id)->delete();
+        $message ='User Succesfully Deleted';
+        return response()->json(['message'=>$message],200);
+    }
 }
