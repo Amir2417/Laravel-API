@@ -102,9 +102,34 @@ class UserApiController extends Controller
                 return response()->json($validator->errors(),422);
             }
 
-            $user = User::findOrfail($id);
+            $user = User::findOrFail($id);
             $user ->name=$data['name']; 
             $user ->password= bcrypt($data['password']); 
+            $user->save(); 
+            $message ='User Succesfully Updated';
+            return response()->json(['message'=>$message],202);
+            
+        }
+    }
+    public function UpdateSingleRecord(Request $request,$id){
+        if($request->ismethod('patch')){
+            $data = $request->all();
+
+            $rules =[
+                'name' => 'required',
+                
+            ];
+            $customMessage = [
+                'name.required' => 'Name is Required',
+                
+            ];
+            $validator = Validator::make($data,$rules,$customMessage);
+            if($validator->fails()){
+                return response()->json($validator->errors(),422);
+            }
+
+            $user = User::findOrFail($id);
+            $user ->name=$data['name']; 
             $user->save(); 
             $message ='User Succesfully Updated';
             return response()->json(['message'=>$message],202);
