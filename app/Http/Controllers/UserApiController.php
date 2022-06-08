@@ -49,6 +49,7 @@ class UserApiController extends Controller
 
         }
     }
+    //Multiple User
     public function AddMultipleUser(Request $request){
         if($request->ismethod('post')){
             $data = $request->all();
@@ -81,6 +82,33 @@ class UserApiController extends Controller
             }
             return response()->json(['message'=>$message]);
 
+        }
+    }
+
+    public function UpdateUserDetails(Request $request,$id){
+        if($request->ismethod('put')){
+            $data = $request->all();
+
+            $rules =[
+                'name' => 'required',
+                'password' => 'required',
+            ];
+            $customMessage = [
+                'name.required' => 'Name is Required',
+                'password.required' => 'Password is Required',
+            ];
+            $validator = Validator::make($data,$rules,$customMessage);
+            if($validator->fails()){
+                return response()->json($validator->errors(),422);
+            }
+
+            $user = User::findOrfail($id);
+            $user ->name=$data['name']; 
+            $user ->password= bcrypt($data['password']); 
+            $user->save(); 
+            $message ='User Succesfully Updated';
+            return response()->json(['message'=>$message],202);
+            
         }
     }
 }
